@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Galena Park Transit Access and Community Needs Survey">
+  <title>Galena Park Transit Access and Community Needs Survey</title>
+  <style>
+    :root {
+      --sage-900: #31483b;
+      --sage-800: #3f5d4c;
+      --sage-700: #547763;
+      --sage-600: #6f927c;
+      --sage-500: #8eaa97;
+      --sage-300: #c6d5ca;
+      --sage-200: #dce7df;
+      --sage-100: #eef4ef;
+      --cream: #fbfaf6;
+      --white: #ffffff;
+      --ink: #1f2923;
+      --muted: #5d6b62;
+      --border: #cad6cd;
+      --danger: #a62929;
+      --gold: #d8a900;
+      --shadow: 0 14px 35px rgba(49, 72, 59, 0.12);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(198,213,202,.45), transparent 35rem),
+        linear-gradient(180deg, var(--sage-100), var(--cream) 28rem);
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      line-height: 1.55;
+    }
+
+    button, input, select, textarea { font: inherit; }
+
+    .site-shell {
+      width: min(1040px, calc(100% - 28px));
+      margin: 24px auto 64px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 10px;
+    }
+
+    .language-toggle {
+      display: inline-flex;
+      border: 1px solid var(--sage-300);
+      border-radius: 999px;
+      padding: 4px;
+      background: rgba(255,255,255,.9);
+      box-shadow: 0 5px 18px rgba(49,72,59,.08);
+    }
+
+    .language-toggle button {
+      border: 0;
+      background: transparent;
+      color: var(--sage-900);
+      padding: 8px 15px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .language-toggle button.active {
+      background: var(--sage-800);
+      color: white;
+    }
+
+    .hero {
+      background: rgba(255,255,255,.95);
+      border: 1px solid var(--sage-200);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: clamp(24px, 5vw, 50px);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      height: 8px;
+      position: absolute;
+      inset: 0 0 auto 0;
+      background: linear-gradient(90deg, var(--sage-700), var(--sage-500), var(--gold));
+    }
+
+    .logo {
+      width: min(210px, 48vw);
+      height: auto;
+      display: block;
+      margin: 0 auto 18px;
+    }
+
+    .eyebrow {
+      color: var(--sage-700);
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-size: .82rem;
+    }
+
+    h1 {
+      color: var(--sage-900);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      line-height: 1.08;
+      max-width: 850px;
+      margin: 10px auto 14px;
+    }
+
+    .lead {
+      max-width: 760px;
+      margin: auto;
+      color: var(--muted);
+      font-size: 1.06rem;
+    }
+
+    .time-pill {
+      display: inline-flex;
+      margin-top: 20px;
+      padding: 8px 13px;
+      border-radius: 999px;
+      color: var(--sage-900);
+      background: var(--sage-100);
+      font-weight: 700;
+    }
+
+    .notice {
+      margin-top: 22px;
+      padding: 18px;
+      border-left: 5px solid var(--sage-600);
+      border-radius: 12px;
+      background: var(--sage-100);
+      text-align: left;
+    }
+
+    .progress-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      margin: 18px 0;
+      padding: 14px 16px;
+      border: 1px solid var(--sage-200);
+      border-radius: 14px;
+      background: rgba(251,250,246,.96);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 22px rgba(49,72,59,.08);
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-weight: 700;
+      color: var(--sage-900);
+      font-size: .92rem;
+    }
+
+    .progress-track {
+      height: 10px;
+      overflow: hidden;
+      border-radius: 99px;
+      background: var(--sage-200);
+    }
+
+    .progress-bar {
+      width: 14.285%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--sage-800), var(--sage-500));
+      transition: width .25s ease;
+    }
+
+    form { margin-top: 18px; }
+
+    .section-card {
+      display: none;
+      background: rgba(255,255,255,.97);
+      border: 1px solid var(--sage-200);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: clamp(20px, 4vw, 36px);
+    }
+
+    .section-card.active { display: block; }
+
+    .section-kicker {
+      color: var(--sage-700);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: .8rem;
+    }
+
+    .section-card h2 {
+      margin: 4px 0 8px;
+      color: var(--sage-900);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.65rem, 4vw, 2.3rem);
+    }
+
+    .section-intro {
+      color: var(--muted);
+      margin: 0 0 20px;
+    }
+
+    .question {
+      padding: 22px 0;
+      border-top: 1px solid var(--sage-200);
+    }
+
+    .question:first-of-type { border-top: 0; }
+
+    .question legend,
+    .question > label.prompt {
+      display: block;
+      width: 100%;
+      margin-bottom: 12px;
+      font-weight: 800;
+      color: var(--ink);
+      font-size: 1.04rem;
+    }
+
+    fieldset {
+      border: 0;
+      padding: 0;
+      margin: 0;
+      min-width: 0;
+    }
+
+    .required-mark { color: var(--danger); }
+
+    .hint {
+      margin: -6px 0 11px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .options {
+      display: grid;
+      gap: 10px;
+    }
+
+    .option {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fff;
+      cursor: pointer;
+      transition: .16s ease;
+    }
+
+    .option:hover {
+      border-color: var(--sage-600);
+      background: var(--sage-100);
+    }
+
+    .option input {
+      margin-top: 4px;
+      accent-color: var(--sage-800);
+      transform: scale(1.12);
+      flex: 0 0 auto;
+    }
+
+    input[type="text"], input[type="email"], input[type="tel"],
+    input[type="number"], input[type="time"], select, textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 12px 13px;
+      color: var(--ink);
+      background: white;
+      outline: none;
+      transition: .15s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--sage-700);
+      box-shadow: 0 0 0 4px rgba(84,119,99,.13);
+    }
+
+    textarea { min-height: 120px; resize: vertical; }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 13px;
+    }
+
+    .field-label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .conditional {
+      display: none;
+      margin-top: 14px;
+      padding: 15px;
+      border-radius: 12px;
+      background: var(--sage-100);
+      border: 1px dashed var(--sage-500);
+    }
+
+    .conditional.show { display: block; }
+
+    .nav-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .btn {
+      min-height: 48px;
+      padding: 12px 22px;
+      border-radius: 11px;
+      border: 0;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .btn-secondary {
+      background: var(--sage-100);
+      color: var(--sage-900);
+      border: 1px solid var(--sage-300);
+    }
+
+    .btn-primary {
+      background: var(--sage-800);
+      color: white;
+      margin-left: auto;
+    }
+
+    .btn-primary:hover { background: var(--sage-900); }
+    .btn:disabled { opacity: .55; cursor: not-allowed; }
+
+    .error-summary {
+      display: none;
+      margin: 0 0 18px;
+      padding: 14px 16px;
+      border: 1px solid #e3aaaa;
+      border-radius: 12px;
+      background: #fff0f0;
+      color: #7d1d1d;
+      font-weight: 700;
+    }
+
+    .error-summary.show { display: block; }
+
+    .status {
+      display: none;
+      margin-top: 18px;
+      padding: 15px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
+    .status.show { display: block; }
+    .status.success { background: #e5f4e8; color: #245e32; }
+    .status.error { background: #fff0f0; color: #8c2424; }
+
+    .confirmation {
+      display: none;
+      padding: 45px 26px;
+      text-align: center;
+      background: white;
+      border: 1px solid var(--sage-200);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .confirmation.show { display: block; }
+    .confirmation h2 { color: var(--sage-900); font-family: Georgia, serif; }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 30px 10px 0;
+      font-size: .9rem;
+    }
+
+    [data-lang="es"] { display: none; }
+    html.lang-es [data-lang="en"] { display: none !important; }
+    html.lang-es [data-lang="es"] { display: initial; }
+    html.lang-es div[data-lang="es"],
+    html.lang-es p[data-lang="es"],
+    html.lang-es span[data-lang="es"],
+    html.lang-es label[data-lang="es"],
+    html.lang-es h1[data-lang="es"],
+    html.lang-es h2[data-lang="es"] { display: block; }
+
+    @media (max-width: 680px) {
+      .site-shell { width: min(100% - 18px, 1040px); margin-top: 10px; }
+      .hero { padding: 28px 18px; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .nav-row { flex-wrap: wrap; }
+      .btn { flex: 1; }
+      .progress-meta { font-size: .82rem; }
+    }
+  </style>
+</head>
+<body>
+  <main class="site-shell">
+    <div class="topbar">
+      <div class="language-toggle" aria-label="Language selection">
+        <button type="button" id="langEn" class="active">English</button>
+        <button type="button" id="langEs">Español</button>
+      </div>
+    </div>
+
+    <header class="hero">
+      <img src="city-logo.png" class="logo" alt="City of Galena Park logo">
+      <div class="eyebrow">
+        <span data-lang="en">City of Galena Park · Office of the Mayor</span>
+        <span data-lang="es">Ciudad de Galena Park · Oficina del Alcalde</span>
+      </div>
+      <h1 data-lang="en">Galena Park Transit Access and Community Needs Survey</h1>
+      <h1 data-lang="es">Encuesta Comunitaria sobre Acceso al Transporte y Necesidades de Galena Park</h1>
+      <p class="lead" data-lang="en">Help document how improved connections between Galena Park and nearby METRO service could affect jobs, healthcare, education, family responsibilities, independence, and quality of life.</p>
+      <p class="lead" data-lang="es">Ayude a documentar cómo mejores conexiones entre Galena Park y el servicio cercano de METRO podrían afectar el empleo, la atención médica, la educación, las responsabilidades familiares, la independencia y la calidad de vida.</p>
+      <div class="time-pill">
+        <span data-lang="en">Approximately 10 minutes</span>
+        <span data-lang="es">Aproximadamente 10 minutos</span>
+      </div>
+      <div class="notice">
+        <strong data-lang="en">Public information and privacy notice</strong>
+        <strong data-lang="es">Aviso de información pública y privacidad</strong>
+        <p data-lang="en">Information submitted to the City may be subject to disclosure under the Texas Public Information Act. Address and location information will be used for planning and geographic analysis. Public reports are expected to use summarized information rather than individual household addresses.</p>
+        <p data-lang="es">La información presentada a la Ciudad puede estar sujeta a divulgación conforme a la Ley de Información Pública de Texas. La información de dirección y ubicación se utilizará para planificación y análisis geográfico. Se espera que los informes públicos utilicen información resumida en lugar de direcciones individuales.</p>
+      </div>
+    </header>
+
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span id="progressLabel">Section 1 of 7</span>
+        <span id="progressPercent">14%</span>
+      </div>
+      <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+    </div>
+
+    <form id="surveyForm" novalidate>
+      <input type="hidden" name="survey_language" id="surveyLanguage" value="English">
+      <input type="hidden" name="form_version" value="1.0">
+      <input type="hidden" name="browser_user_agent" id="userAgent">
+      <input type="hidden" name="referrer" id="referrer">
+
+      <div class="error-summary" id="errorSummary"></div>
+
+      <section class="section-card active" data-section="0">
+        <div class="section-kicker"><span data-lang="en">Section 1 of 7</span><span data-lang="es">Sección 1 de 7</span></div>
+        <h2 data-lang="en">Your Connection to Galena Park</h2>
+        <h2 data-lang="es">Su relación con Galena Park</h2>
+
+        <div class="question">
+          <label class="option">
+            <input type="checkbox" name="privacy_acknowledgment" value="Yes" required>
+            <span><span data-lang="en">I have read and understand the public information and privacy notice. <span class="required-mark">*</span></span><span data-lang="es">He leído y entiendo el aviso de información pública y privacidad. <span class="required-mark">*</span></span></span>
+          </label>
+        </div>
+
+        <fieldset class="question">
+          <legend><span data-lang="en">1. Which of the following describe your connection to Galena Park?</span><span data-lang="es">1. ¿Cuál de las siguientes opciones describe su relación con Galena Park?</span> <span class="required-mark">*</span></legend>
+          <p class="hint"><span data-lang="en">Select all that apply.</span><span data-lang="es">Seleccione todas las que correspondan.</span></p>
+          <div class="options" data-required-group="connection">
+            <label class="option"><input type="checkbox" name="connection" value="Resident"><span data-lang="en">I live in Galena Park</span><span data-lang="es">Vivo en Galena Park</span></label>
+            <label class="option"><input type="checkbox" name="connection" value="Worker"><span data-lang="en">I work in Galena Park</span><span data-lang="es">Trabajo en Galena Park</span></label>
+            <label class="option"><input type="checkbox" name="connection" value="Student"><span data-lang="en">I attend school or training in Galena Park</span><span data-lang="es">Asisto a una escuela o capacitación en Galena Park</span></label>
+            <label class="option"><input type="checkbox" name="connection" value="Business owner"><span data-lang="en">I own or operate a business in Galena Park</span><span data-lang="es">Soy propietario u operador de un negocio en Galena Park</span></label>
+            <label class="option"><input type="checkbox" name="connection" value="Caregiver"><span data-lang="en">I regularly care for or assist someone in Galena Park</span><span data-lang="es">Cuido o ayudo regularmente a alguien en Galena Park</span></label>
+            <label class="option"><input type="checkbox" name="connection" value="Regular visitor"><span data-lang="en">I regularly visit Galena Park for services, shopping, worship, family, or other activities</span><span data-lang="es">Visito regularmente Galena Park por servicios, compras, actividades religiosas, familia u otras actividades</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="question">
+          <legend><span data-lang="en">2. Whose transportation needs are represented?</span><span data-lang="es">2. ¿Las necesidades de transporte de quién están representadas?</span> <span class="required-mark">*</span></legend>
+          <div class="options">
+            <label class="option"><input type="radio" name="responding_for" value="Self" required><span data-lang="en">I am answering for myself</span><span data-lang="es">Estoy respondiendo por mí mismo</span></label>
+            <label class="option"><input type="radio" name="responding_for" value="Child under 16"><span data-lang="en">I am a parent or guardian answering for a child younger than 16</span><span data-lang="es">Soy padre, madre o tutor respondiendo por un menor de 16 años</span></label>
+            <label class="option"><input type="radio" name="responding_for" value="Self and household"><span data-lang="en">I am answering for myself and describing the effect on my household</span><span data-lang="es">Estoy respondiendo por mí mismo y describiendo el efecto en mi hogar</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="question">
+          <legend><span data-lang="en">3. Location information</span><span data-lang="es">3. Información de ubicación</span> <span class="required-mark">*</span></legend>
+          <div class="options">
+            <label class="option"><input type="radio" name="location_method" value="Full address" required data-toggle="fullAddress"><span data-lang="en">I will provide a full street address</span><span data-lang="es">Proporcionaré una dirección completa</span></label>
+            <label class="option"><input type="radio" name="location_method" value="Nearest intersection" data-toggle="intersection"><span data-lang="en">I prefer to provide the nearest street intersection</span><span data-lang="es">Prefiero proporcionar la intersección más cercana</span></label>
+          </div>
+          <div class="conditional" id="fullAddress">
+            <div class="grid-2">
+              <div><label class="field-label"><span data-lang="en">Street address</span><span data-lang="es">Dirección</span></label><input type="text" name="street_address" data-condition-required="fullAddress"></div>
+              <div><label class="field-label"><span data-lang="en">Apartment or unit</span><span data-lang="es">Apartamento o unidad</span></label><input type="text" name="unit"></div>
+              <div><label class="field-label"><span data-lang="en">City</span><span data-lang="es">Ciudad</span></label><input type="text" name="city" value="Galena Park" data-condition-required="fullAddress"></div>
+              <div><label class="field-label"><span data-lang="en">ZIP code</span><span data-lang="es">Código postal</span></label><input type="text" name="zip_code_address" inputmode="numeric" pattern="[0-9]{5}" data-condition-required="fullAddress"></div>
+            </div>
+          </div>
+          <div class="conditional" id="intersection">
+            <div class="grid-2">
+              <div><label class="field-label"><span data-lang="en">Nearest intersection</span><span data-lang="es">Intersección más cercana</span></label><input type="text" name="nearest_intersection" data-condition-required="intersection"></div>
+              <div><label class="field-label"><span data-lang="en">ZIP code</span><span data-lang="es">Código postal</span></label><input type="text" name="zip_code_intersection" inputmode="numeric" pattern="[0-9]{5}" data-condition-required="intersection"></div>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="question">
+          <legend><span data-lang="en">4. What type of location did you provide?</span><span data-lang="es">4. ¿Qué tipo de ubicación proporcionó?</span> <span class="required-mark">*</span></legend>
+          <select name="location_type" required>
+            <option value="">Select / Seleccione</option>
+            <option value="Home">Home / Hogar</option>
+            <option value="Workplace">Workplace / Lugar de trabajo</option>
+            <option value="School or training">School or training / Escuela o capacitación</option>
+            <option value="Business">Business / Negocio</option>
+            <option value="Care recipient home">Home of someone I assist / Hogar de alguien a quien ayudo</option>
+            <option value="Other relevant location">Other relevant location / Otro lugar relevante</option>
+          </select>
+        </fieldset>
+
+        <div class="question">
+          <label class="prompt" for="organization_name"><span data-lang="en">5. Employer, school, business, or organization name</span><span data-lang="es">5. Nombre del empleador, escuela, negocio u organización</span></label>
+          <input type="text" id="organization_name" name="organization_name">
+        </div>
+      </section>
+
+      <section class="section-card" data-section="1">
+        <div class="section-kicker"><span data-lang="en">Section 2 of 7</span><span data-lang="es">Sección 2 de 7</span></div>
+        <h2 data-lang="en">Current Transportation and METRO Access</h2>
+        <h2 data-lang="es">Transporte actual y acceso a METRO</h2>
+
+        <fieldset class="question">
+          <legend><span data-lang="en">6. How often do you currently use METRO?</span><span data-lang="es">6. ¿Con qué frecuencia utiliza METRO actualmente?</span> <span class="required-mark">*</span></legend>
+          <select name="metro_use" required>
+            <option value="">Select / Seleccione</option>
+            <option>Regularly / Regularmente</option><option>Occasionally / Ocasionalmente</option><option>Rarely / Rara vez</option>
+            <option>Never, but would with easier access / Nunca, pero lo usaría con mejor acceso</option>
+            <option>Never and probably would not / Nunca y probablemente no lo usaría</option>
+          </select>
+        </fieldset>
+
+        <fieldset class="question">
+          <legend><span data-lang="en">7. Do you know which METRO stop, station, or transit center would be most useful?</span><span data-lang="es">7. ¿Sabe qué parada, estación o centro de tránsito de METRO sería más útil?</span> <span class="required-mark">*</span></legend>
+          <div class="options">
+            <label class="option"><input type="radio" name="knows_metro_point" value="Yes" required data-toggle="metroPoint"><span data-lang="en">Yes</span><span data-lang="es">Sí</span></label>
+            <label class="option"><input type="radio" name="knows_metro_point" value="No"><span>No</span></label>
+            <label class="option"><input type="radio" name="knows_metro_point" value="General area" data-toggle="metroPoint"><span data-lang="en">I know the general area, but not the name</span><span data-lang="es">Conozco el área general, pero no el nombre</span></label>
+          </div>
+          <div class="conditional" id="metroPoint">
+            <label class="field-label"><span data-lang="en">Stop, station, transit center, intersection, landmark, or address</span><span data-lang="es">Parada, estación, centro de tránsito, intersección, punto de referencia o dirección</span></label>
+            <input type="text" name="preferred_metro_point" data-condition-required="metroPoint">
+          </div>
+        </fieldset>
+
+        <fieldset class="question">
+          <legend><span data-lang="en">8. If you do not know the best connection, what would you prefer?</span><span data-lang="es">8. Si no conoce la mejor conexión, ¿qué preferiría?</span> <span class="required-mark">*</span></legend>
+          <select name="connection_preference" required>
+            <option value="">Select / Seleccione</option>
+            <option>Nearest useful METRO stop / Parada útil más cercana</option>
+            <option>Major METRO transit center / Centro de tránsito principal</option>
+            <option>Fastest overall trip / Viaje completo más rápido</option>
+            <option>Not sure / No estoy seguro</option>
+          </select>
+        </fieldset>
+
+        <fieldset class="question">
+          <legend><span data-lang="en">9. What is the single biggest transportation problem you currently face?</span><span data-lang="es">9. ¿Cuál es el principal problema de transporte que enfrenta?</span> <span class="required-mark">*</span></legend>
+          <select name="biggest_problem" required>
+            <option value="">Select / Seleccione</option>
+            <option>METRO is too far away / METRO está demasiado lejos</option>
+            <option>No dependable transportation / No tengo transporte confiable</option>
+            <option>Depend on others for rides / Dependo de otras personas</option>
+            <option>Transportation does not operate when needed / No funciona cuando lo necesito</option>
+            <option>Trips take too long / Los viajes tardan demasiado</option>
+            <option>Transportation costs too much / Es demasiado costoso</option>
+            <option>Disability, health, or mobility limitation / Discapacidad, salud o movilidad</option>
+            <option>Difficulty transporting dependents / Dificultad transportando dependientes</option>
+            <option>No major transportation problem / Ningún problema importante</option>
+            <option>Other / Otro</option>
+          </select>
+        </fieldset>
+
+        <div class="question">
+          <label class="prompt"><span data-lang="en">10. Briefly explain your biggest transportation problem.</span><span data-lang="es">10. Explique brevemente su principal problema de transporte.</span> <span class="required-mark">*</span></label>
+          <textarea name="problem_explanation" maxlength="500" required></textarea>
+        </div>
+
+        <fieldset class="question">
+          <legend><span data-lang="en">11. Do you currently depend on another person for transportation?</span><span data-lang="es">11. ¿Actualmente depende de otra persona para transportarse?</span> <span class="required-mark">*</span></legend>
+          <select name="depends_on_others" required data-select-toggle="rideDifficulties">
+            <option value="">Select / Seleccione</option><option>Frequently / Frecuentemente</option><option>Sometimes / A veces</option><option>Rarely / Rara vez</option><option value="Never">Never / Nunca</option>
+          </select>
+          <div class="conditional" id="rideDifficulties">
+            <fieldset>
+              <legend><span data-lang="en">12. What difficulties can that create?</span><span data-lang="es">12. ¿Qué dificultades puede causar?</span> <span class="required-mark">*</span></legend>
+              <div class="options" data-required-group="ride_difficulties">
+                <label class="option"><input type="checkbox" name="ride_difficulties" value="Schedule conflicts"><span data-lang="en">Schedule conflicts</span><span data-lang="es">Conflictos de horario</span></label>
+                <label class="option"><input type="checkbox" name="ride_difficulties" value="Missed or delayed work"><span data-lang="en">Missed or delayed work</span><span data-lang="es">Trabajo perdido o retrasos</span></label>
+                <label class="option"><input type="checkbox" name="ride_difficulties" value="Childcare difficulties"><span data-lang="en">Childcare difficulties</span><span data-lang="es">Dificultades con el cuidado de niños</span></label>
+                <label class="option"><input type="checkbox" name="ride_difficulties" value="Costs to ride provider"><span data-lang="en">Fuel or vehicle costs for the person providing the ride</span><span data-lang="es">Gastos para la persona que proporciona el transporte</span></label>
+                <label class="option"><input type="checkbox" name="ride_difficulties" value="Provider misses responsibilities"><span data-lang="en">The person providing the ride misses responsibilities</span><span data-lang="es">La persona que proporciona el transporte pierde responsabilidades</span></label>
+                <label class="option"><input type="checkbox" name="ride_difficulties" value="Loss of independence"><span data-lang="en">Loss of independence</span><span data-lang="es">Pérdida de independencia</span></label>
+                <label class="option"><input type="checkbox" name="ride_difficulties" value="Stress or conflict"><span data-lang="en">Stress or conflict</span><span data-lang="es">Estrés o conflicto</span></label>
+                <label class="option"><input type="checkbox" name="ride_difficulties" value="None"><span data-lang="en">I do not experience these difficulties</span><span data-lang="es">No experimento estas dificultades</span></label>
+              </div>
+            </fieldset>
+          </div>
+        </fieldset>
+
+        <fieldset class="question">
+          <legend><span data-lang="en">13. Do you have difficulty using transportation because of a disability, health condition, or mobility limitation?</span><span data-lang="es">13. ¿Tiene dificultad para utilizar el transporte debido a una discapacidad, condición de salud o limitación de movilidad?</span> <span class="required-mark">*</span></legend>
+          <select name="mobility_difficulty" required><option value="">Select / Seleccione</option><option>Yes, regularly / Sí, regularmente</option><option>Yes, sometimes / Sí, a veces</option><option>No</option><option>Prefer not to answer / Prefiero no responder</option></select>
+        </fieldset>
+      </section>
+
+      <section class="section-card" data-section="2">
+        <div class="section-kicker"><span data-lang="en">Section 3 of 7</span><span data-lang="es">Sección 3 de 7</span></div>
+        <h2 data-lang="en">Transportation Needs and Quality of Life</h2>
+        <h2 data-lang="es">Necesidades de transporte y calidad de vida</h2>
+
+        <fieldset class="question">
+          <legend><span data-lang="en">14. Which parts of your life could improve with better access to METRO?</span><span data-lang="es">14. ¿Qué aspectos de su vida podrían mejorar con un mejor acceso a METRO?</span> <span class="required-mark">*</span></legend>
+          <div class="options" data-required-group="life_impacts">
+            <label class="option"><input type="checkbox" name="life_impacts" value="Getting to work"><span data-lang="en">Getting to work</span><span data-lang="es">Llegar al trabajo</span></label>
+            <label class="option"><input type="checkbox" name="life_impacts" value="Better employment"><span data-lang="en">Finding a better job or working more hours</span><span data-lang="es">Encontrar un mejor empleo o trabajar más horas</span></label>
+            <label class="option"><input type="checkbox" name="life_impacts" value="Medical care"><span data-lang="en">Medical appointments, pharmacy, or treatment</span><span data-lang="es">Citas médicas, farmacia o tratamiento</span></label>
+            <label class="option"><input type="checkbox" name="life_impacts" value="Education"><span data-lang="en">School, college, training, or childcare</span><span data-lang="es">Escuela, universidad, capacitación o cuidado de niños</span></label>
+            <label class="option"><input type="checkbox" name="life_impacts" value="Errands"><span data-lang="en">Groceries and essential errands</span><span data-lang="es">Compras de alimentos y mandados esenciales</span></label>
+            <label class="option"><input type="checkbox" name="life_impacts" value="Services"><span data-lang="en">Government or social services</span><span data-lang="es">Servicios gubernamentales o sociales</span></label>
+            <label class="option"><input type="checkbox" name="life_impacts" value="Family and caregiving"><span data-lang="en">Family, caregiving, religious, or community activities</span><span data-lang="es">Familia, cuidado, actividades religiosas o comunitarias</span></label>
+            <label class="option"><input type="checkbox" name="life_impacts" value="Independence"><span data-lang="en">Greater independence and less reliance on others</span><span data-lang="es">Mayor independencia y menor dependencia de otros</span></label>
+            <label class="option"><input type="checkbox" name="life_impacts" value="Time and quality of life"><span data-lang="en">Saving time and improving overall quality of life</span><span data-lang="es">Ahorrar tiempo y mejorar la calidad de vida</span></label>
+            <label class="option"><input type="checkbox" name="life_impacts" value="No significant effect"><span data-lang="en">Better access would not significantly affect my life</span><span data-lang="es">Un mejor acceso no afectaría significativamente mi vida</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="question">
+          <legend><span data-lang="en">15. Overall, how much would better access improve your life?</span><span data-lang="es">15. En general, ¿cuánto mejoraría su vida un mejor acceso?</span> <span class="required-mark">*</span></legend>
+          <select name="overall_impact" required><option value="">Select / Seleccione</option><option>No meaningful change / Ningún cambio significativo</option><option>Small improvement / Pequeña mejora</option><option>Moderate improvement / Mejora moderada</option><option>Major improvement / Mejora importante</option><option>Life-changing improvement / Cambiaría mi vida</option></select>
+        </fieldset>
+
+        <div class="question">
+          <label class="prompt"><span data-lang="en">16. Besides you, how many other people in your household would meaningfully benefit?</span><span data-lang="es">16. Además de usted, ¿cuántas otras personas de su hogar se beneficiarían significativamente?</span> <span class="required-mark">*</span></label>
+          <select name="additional_household_benefit" required><option value="">Select / Seleccione</option><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option><option>More than 20 / Más de 20</option></select>
+        </div>
+
+        <fieldset class="question">
+          <legend><span data-lang="en">17. Are you responsible for transporting or accompanying anyone else?</span><span data-lang="es">17. ¿Es responsable de transportar o acompañar a otra persona?</span> <span class="required-mark">*</span></legend>
+          <div class="options" data-required-group="care_responsibilities">
+            <label class="option"><input type="checkbox" name="care_responsibilities" value="Children"><span data-lang="en">A child or children</span><span data-lang="es">Un niño o varios niños</span></label>
+            <label class="option"><input type="checkbox" name="care_responsibilities" value="Older adult"><span data-lang="en">An older adult</span><span data-lang="es">Un adulto mayor</span></label>
+            <label class="option"><input type="checkbox" name="care_responsibilities" value="Person with disability"><span data-lang="en">A person with a disability or mobility limitation</span><span data-lang="es">Una persona con discapacidad o limitación de movilidad</span></label>
+            <label class="option"><input type="checkbox" name="care_responsibilities" value="Other person"><span data-lang="en">Another family or household member</span><span data-lang="es">Otro familiar o miembro del hogar</span></label>
+            <label class="option"><input type="checkbox" name="care_responsibilities" value="None"><span data-lang="en">No one else</span><span data-lang="es">Nadie más</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="question">
+          <legend><span data-lang="en">18. Would better access make it easier to transport or accompany people who depend on you?</span><span data-lang="es">18. ¿Un mejor acceso facilitaría transportar o acompañar a las personas que dependen de usted?</span> <span class="required-mark">*</span></legend>
+          <select name="caregiver_access_effect" required><option value="">Select / Seleccione</option><option>Yes, significantly / Sí, significativamente</option><option>Yes, somewhat / Sí, en cierta medida</option><option>No</option><option>Not applicable / No corresponde</option></select>
+        </fieldset>
+      </section>
+
+      <section class="section-card" data-section="3">
+        <div class="section-kicker"><span data-lang="en">Section 4 of 7</span><span data-lang="es">Sección 4 de 7</span></div>
+        <h2 data-lang="en">Potential Use of a New Connection</h2>
+        <h2 data-lang="es">Posible uso de una nueva conexión</h2>
+
+        <fieldset class="question"><legend><span data-lang="en">19. How likely would you be to use a reliable first-mile or last-mile service?</span><span data-lang="es">19. ¿Qué tan probable sería que utilizara un servicio confiable de primera o última milla?</span> <span class="required-mark">*</span></legend>
+          <select name="likelihood_to_use" required><option value="">Select / Seleccione</option><option>Definitely would use it / Definitivamente lo utilizaría</option><option>Probably would use it / Probablemente lo utilizaría</option><option>Might use it / Tal vez lo utilizaría</option><option>Probably would not / Probablemente no</option><option>Definitely would not / Definitivamente no</option></select>
+        </fieldset>
+
+        <fieldset class="question"><legend><span data-lang="en">20. How often would you expect to use it?</span><span data-lang="es">20. ¿Con qué frecuencia espera utilizarlo?</span> <span class="required-mark">*</span></legend>
+          <select name="expected_frequency" required><option value="">Select / Seleccione</option><option>5+ days per week / 5+ días por semana</option><option>3–4 days per week / 3–4 días por semana</option><option>1–2 days per week / 1–2 días por semana</option><option>A few times per month / Algunas veces al mes</option><option>Occasional essential trips / Viajes esenciales ocasionales</option><option>Not sure / No estoy seguro</option><option>Would not use it / No lo utilizaría</option></select>
+        </fieldset>
+
+        <fieldset class="question"><legend><span data-lang="en">21. Approximately how many one-way trips would you make in a typical week?</span><span data-lang="es">21. Aproximadamente, ¿cuántos viajes de ida realizaría durante una semana típica?</span> <span class="required-mark">*</span></legend>
+          <select name="weekly_one_way_trips" required><option value="">Select / Seleccione</option><option>0</option><option>1–2</option><option>3–4</option><option>5–6</option><option>7–10</option><option>11–14</option><option>15+</option><option>Not sure / No estoy seguro</option></select>
+        </fieldset>
+
+        <fieldset class="question"><legend><span data-lang="en">22. Which types of service would you consider using?</span><span data-lang="es">22. ¿Qué tipos de servicio consideraría utilizar?</span> <span class="required-mark">*</span></legend>
+          <div class="options" data-required-group="service_types">
+            <label class="option"><input type="checkbox" name="service_types" value="Fixed-route shuttle"><span data-lang="en">Fixed-route neighborhood shuttle</span><span data-lang="es">Transporte vecinal con ruta fija</span></label>
+            <label class="option"><input type="checkbox" name="service_types" value="On-demand microtransit"><span data-lang="en">On-demand microtransit van</span><span data-lang="es">Vehículo de microtransporte a solicitud</span></label>
+            <label class="option"><input type="checkbox" name="service_types" value="Scheduled connector"><span data-lang="en">Scheduled connector to METRO</span><span data-lang="es">Conexión programada a METRO</span></label>
+            <label class="option"><input type="checkbox" name="service_types" value="Subsidized rideshare"><span data-lang="en">Subsidized rideshare or taxi trips</span><span data-lang="es">Viajes subsidiados en taxi o aplicación</span></label>
+            <label class="option"><input type="checkbox" name="service_types" value="Accessible transportation"><span data-lang="en">Accessible service for seniors and people with disabilities</span><span data-lang="es">Servicio accesible para adultos mayores y personas con discapacidades</span></label>
+            <label class="option"><input type="checkbox" name="service_types" value="Bike or scooter"><span data-lang="en">Bicycle or scooter connections</span><span data-lang="es">Conexiones para bicicletas o scooters</span></label>
+            <label class="option"><input type="checkbox" name="service_types" value="Any reliable option"><span data-lang="en">Any reliable option</span><span data-lang="es">Cualquier opción confiable</span></label>
+            <label class="option"><input type="checkbox" name="service_types" value="Not sure"><span data-lang="en">Not sure which would be best</span><span data-lang="es">No estoy seguro cuál sería mejor</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="question"><legend><span data-lang="en">23. Maximum distance you would travel to a pickup point</span><span data-lang="es">23. Distancia máxima que recorrería para llegar a un punto de recogida</span> <span class="required-mark">*</span></legend>
+          <select name="pickup_distance" required><option value="">Select / Seleccione</option><option>Door-to-door only / Solo puerta a puerta</option><option>Up to ¼ mile / Hasta ¼ de milla</option><option>Up to ½ mile / Hasta ½ milla</option><option>Up to 1 mile / Hasta 1 milla</option><option>More than 1 mile / Más de 1 milla</option><option>Not sure / No estoy seguro</option></select>
+        </fieldset>
+
+        <fieldset class="question"><legend><span data-lang="en">24. Longest acceptable wait for an on-demand ride</span><span data-lang="es">24. Tiempo máximo aceptable de espera para un viaje a solicitud</span> <span class="required-mark">*</span></legend>
+          <select name="maximum_wait" required><option value="">Select / Seleccione</option><option>10 minutes or less / 10 minutos o menos</option><option>15 minutes / 15 minutos</option><option>20 minutes / 20 minutos</option><option>30 minutes / 30 minutos</option><option>More than 30 minutes / Más de 30 minutos</option><option>Not sure / No estoy seguro</option></select>
+        </fieldset>
+
+        <fieldset class="question"><legend><span data-lang="en">25. Most you could reasonably afford per one-way trip</span><span data-lang="es">25. Cantidad máxima que podría pagar razonablemente por un viaje de ida</span> <span class="required-mark">*</span></legend>
+          <select name="fare_tolerance" required><option value="">Select / Seleccione</option><option>Free only / Solo gratuito</option><option>Up to $1 / Hasta $1</option><option>Up to $2 / Hasta $2</option><option>Up to $3 / Hasta $3</option><option>More than $3 / Más de $3</option><option>Depends on distance or service / Depende de la distancia o servicio</option><option>Need reduced fare / Necesito tarifa reducida</option><option>Not sure / No estoy seguro</option></select>
+        </fieldset>
+      </section>
+
+      <section class="section-card" data-section="4">
+        <div class="section-kicker"><span data-lang="en">Section 5 of 7</span><span data-lang="es">Sección 5 de 7</span></div>
+        <h2 data-lang="en">Days, Times, and Destinations</h2>
+        <h2 data-lang="es">Días, horarios y destinos</h2>
+
+        <fieldset class="question"><legend><span data-lang="en">26. When would you need the service?</span><span data-lang="es">26. ¿Cuándo necesitaría el servicio?</span> <span class="required-mark">*</span></legend>
+          <div class="options" data-required-group="service_times">
+            <label class="option"><input type="checkbox" name="service_times" value="Early weekday mornings"><span data-lang="en">Early weekday mornings</span><span data-lang="es">Temprano por la mañana entre semana</span></label>
+            <label class="option"><input type="checkbox" name="service_times" value="Weekday mornings"><span data-lang="en">Weekday mornings</span><span data-lang="es">Mañanas entre semana</span></label>
+            <label class="option"><input type="checkbox" name="service_times" value="Weekday midday"><span data-lang="en">Weekday midday</span><span data-lang="es">Mediodía entre semana</span></label>
+            <label class="option"><input type="checkbox" name="service_times" value="Weekday afternoons"><span data-lang="en">Weekday afternoons</span><span data-lang="es">Tardes entre semana</span></label>
+            <label class="option"><input type="checkbox" name="service_times" value="Weekday evenings"><span data-lang="en">Weekday evenings</span><span data-lang="es">Noches entre semana</span></label>
+            <label class="option"><input type="checkbox" name="service_times" value="Late nights or shift work"><span data-lang="en">Late nights or shift-work hours</span><span data-lang="es">Altas horas de la noche o trabajo por turnos</span></label>
+            <label class="option"><input type="checkbox" name="service_times" value="Saturday"><span data-lang="en">Saturday</span><span data-lang="es">Sábado</span></label>
+            <label class="option"><input type="checkbox" name="service_times" value="Sunday"><span data-lang="en">Sunday</span><span data-lang="es">Domingo</span></label>
+          </div>
+        </fieldset>
+
+        <div class="question grid-2">
+          <div><label class="field-label"><span data-lang="en">27. Earliest departure time</span><span data-lang="es">27. Hora más temprana de salida</span></label><input type="time" name="earliest_departure" required></div>
+          <div><label class="field-label"><span data-lang="en">28. Latest return time</span><span data-lang="es">28. Hora más tarde de regreso</span></label><input type="time" name="latest_return" required></div>
+        </div>
+
+        <div id="destinations"></div>
+
+        <fieldset class="question"><legend><span data-lang="en">37. Which destinations outside Galena Park would better access help you reach?</span><span data-lang="es">37. ¿A qué destinos fuera de Galena Park le ayudaría a llegar un mejor acceso?</span> <span class="required-mark">*</span></legend>
+          <div class="options" data-required-group="regional_destinations">
+            <label class="option"><input type="checkbox" name="regional_destinations" value="Downtown Houston"><span>Downtown Houston / Centro de Houston</span></label>
+            <label class="option"><input type="checkbox" name="regional_destinations" value="Texas Medical Center"><span>Texas Medical Center / Centro Médico de Texas</span></label>
+            <label class="option"><input type="checkbox" name="regional_destinations" value="Education"><span data-lang="en">Colleges, universities, or training</span><span data-lang="es">Universidades o capacitación</span></label>
+            <label class="option"><input type="checkbox" name="regional_destinations" value="Employment centers"><span data-lang="en">Major employment centers</span><span data-lang="es">Principales centros de empleo</span></label>
+            <label class="option"><input type="checkbox" name="regional_destinations" value="Government offices"><span data-lang="en">Government offices</span><span data-lang="es">Oficinas gubernamentales</span></label>
+            <label class="option"><input type="checkbox" name="regional_destinations" value="Shopping"><span data-lang="en">Shopping areas</span><span data-lang="es">Zonas comerciales</span></label>
+            <label class="option"><input type="checkbox" name="regional_destinations" value="Other Harris County communities"><span data-lang="en">Other communities in Harris County</span><span data-lang="es">Otras comunidades del Condado de Harris</span></label>
+            <label class="option"><input type="checkbox" name="regional_destinations" value="Airports"><span data-lang="en">Airports or regional transportation</span><span data-lang="es">Aeropuertos o transporte regional</span></label>
+            <label class="option"><input type="checkbox" name="regional_destinations" value="None"><span data-lang="en">I do not regularly need to travel outside Galena Park</span><span data-lang="es">No necesito viajar regularmente fuera de Galena Park</span></label>
+          </div>
+        </fieldset>
+
+        <div class="question">
+          <label class="prompt"><span data-lang="en">38. Specific important destinations outside Galena Park</span><span data-lang="es">38. Destinos específicos importantes fuera de Galena Park</span></label>
+          <textarea name="specific_regional_destinations"></textarea>
+        </div>
+      </section>
+
+      <section class="section-card" data-section="5">
+        <div class="section-kicker"><span data-lang="en">Section 6 of 7</span><span data-lang="es">Sección 6 de 7</span></div>
+        <h2 data-lang="en">Household and Demographic Information</h2>
+        <h2 data-lang="es">Información del hogar y datos demográficos</h2>
+        <p class="section-intro" data-lang="en">These questions support grant and equity analysis. “Prefer not to answer” is available.</p>
+        <p class="section-intro" data-lang="es">Estas preguntas apoyan el análisis de subvenciones y equidad. Puede seleccionar “Prefiero no responder”.</p>
+
+        <div id="demographics"></div>
+      </section>
+
+      <section class="section-card" data-section="6">
+        <div class="section-kicker"><span data-lang="en">Section 7 of 7</span><span data-lang="es">Sección 7 de 7</span></div>
+        <h2 data-lang="en">Community Support, Comments, and Follow-Up</h2>
+        <h2 data-lang="es">Apoyo comunitario, comentarios y seguimiento</h2>
+
+        <fieldset class="question"><legend><span data-lang="en">51. Would you support the City working with METRO or another provider to establish a first- and last-mile program?</span><span data-lang="es">51. ¿Apoyaría que la Ciudad trabajara con METRO u otro proveedor para establecer un programa de primera y última milla?</span> <span class="required-mark">*</span></legend>
+          <select name="partnership_support" required><option value="">Select / Seleccione</option><option>Strongly support / Apoyo firmemente</option><option>Support / Apoyo</option><option>Neutral or unsure / Neutral o no estoy seguro</option><option>Oppose / Me opongo</option><option>Strongly oppose / Me opongo firmemente</option></select>
+        </fieldset>
+
+        <fieldset class="question"><legend><span data-lang="en">52. Which forms of City participation would you support?</span><span data-lang="es">52. ¿Qué formas de participación de la Ciudad apoyaría?</span> <span class="required-mark">*</span></legend>
+          <div class="options" data-required-group="city_participation">
+            <label class="option"><input type="checkbox" name="city_participation" value="Grant applications"><span data-lang="en">Applying for state or federal grants</span><span data-lang="es">Solicitar subvenciones estatales o federales</span></label>
+            <label class="option"><input type="checkbox" name="city_participation" value="Grant-funded pilot"><span data-lang="en">Participating in a grant-funded pilot</span><span data-lang="es">Participar en un programa piloto financiado</span></label>
+            <label class="option"><input type="checkbox" name="city_participation" value="Local funding"><span data-lang="en">Contributing some local funding</span><span data-lang="es">Aportar parte de los fondos locales</span></label>
+            <label class="option"><input type="checkbox" name="city_participation" value="City vehicles"><span data-lang="en">Providing City-owned vehicles</span><span data-lang="es">Proporcionar vehículos de la Ciudad</span></label>
+            <label class="option"><input type="checkbox" name="city_participation" value="City staff"><span data-lang="en">Providing City staff or drivers</span><span data-lang="es">Proporcionar personal o conductores</span></label>
+            <label class="option"><input type="checkbox" name="city_participation" value="City facilities"><span data-lang="en">Using City facilities as pickup or transfer points</span><span data-lang="es">Usar instalaciones de la Ciudad como puntos de recogida</span></label>
+            <label class="option"><input type="checkbox" name="city_participation" value="METRO partnership"><span data-lang="en">Forming a partnership with METRO</span><span data-lang="es">Formar una asociación con METRO</span></label>
+            <label class="option"><input type="checkbox" name="city_participation" value="Other provider partnership"><span data-lang="en">Forming a partnership with another provider</span><span data-lang="es">Formar una asociación con otro proveedor</span></label>
+            <label class="option"><input type="checkbox" name="city_participation" value="No local contribution"><span data-lang="en">I would not support a local City contribution</span><span data-lang="es">No apoyaría una contribución local de la Ciudad</span></label>
+            <label class="option"><input type="checkbox" name="city_participation" value="Unsure"><span data-lang="en">I am not sure</span><span data-lang="es">No estoy seguro</span></label>
+          </div>
+        </fieldset>
+
+        <div class="question">
+          <label class="prompt"><span data-lang="en">53. In your own words, how would better access affect you, your household, or the community?</span><span data-lang="es">53. En sus propias palabras, ¿cómo afectaría un mejor acceso a usted, su hogar o la comunidad?</span> <span class="required-mark">*</span></label>
+          <textarea name="community_impact_comment" maxlength="1500" required></textarea>
+        </div>
+
+        <fieldset class="question"><legend><span data-lang="en">54. May the City use your written comments in presentations, reports, discussions, or grant applications?</span><span data-lang="es">54. ¿Puede la Ciudad utilizar sus comentarios en presentaciones, informes, conversaciones o solicitudes de subvenciones?</span> <span class="required-mark">*</span></legend>
+          <select name="testimonial_permission" id="testimonialPermission" required>
+            <option value="">Select / Seleccione</option>
+            <option value="Named">Yes, with my name / Sí, con mi nombre</option>
+            <option value="Anonymous">Yes, anonymously / Sí, anónimamente</option>
+            <option value="Internal only">No, internal analysis only / No, solo análisis interno</option>
+          </select>
+        </fieldset>
+
+        <div class="question grid-2">
+          <div><label class="field-label"><span data-lang="en">55. Name</span><span data-lang="es">55. Nombre</span></label><input type="text" name="name" id="nameField"></div>
+          <div><label class="field-label"><span data-lang="en">56. Email</span><span data-lang="es">56. Correo electrónico</span></label><input type="email" name="email" id="emailField"></div>
+          <div><label class="field-label"><span data-lang="en">57. Telephone</span><span data-lang="es">57. Teléfono</span></label><input type="tel" name="phone" id="phoneField"></div>
+        </div>
+
+        <fieldset class="question"><legend><span data-lang="en">58. May the City contact you with questions?</span><span data-lang="es">58. ¿Puede la Ciudad comunicarse con usted para hacerle preguntas?</span></legend>
+          <select name="follow_up_permission" id="followUp"><option value="">Optional / Opcional</option><option value="Yes">Yes / Sí</option><option value="No">No</option></select>
+        </fieldset>
+
+        <fieldset class="question"><legend><span data-lang="en">59. Would you participate in a future community focus group?</span><span data-lang="es">59. ¿Participaría en un futuro grupo de enfoque comunitario?</span></legend>
+          <select name="focus_group_interest" id="focusGroup"><option value="">Optional / Opcional</option><option value="Yes">Yes / Sí</option><option value="Maybe">Maybe / Tal vez</option><option value="No">No</option></select>
+        </fieldset>
+
+        <div class="conditional" id="contactPreferences">
+          <div class="grid-2">
+            <div><label class="field-label"><span data-lang="en">60. Best contact method</span><span data-lang="es">60. Mejor método de contacto</span></label><select name="best_contact_method"><option value="">Select / Seleccione</option><option>Email / Correo electrónico</option><option>Telephone call / Llamada</option><option>Text message / Mensaje de texto</option></select></div>
+            <div><label class="field-label"><span data-lang="en">61. General focus-group availability</span><span data-lang="es">61. Disponibilidad general para grupo de enfoque</span></label><input type="text" name="focus_group_availability" placeholder="Example: weekday evenings / Ejemplo: noches entre semana"></div>
+          </div>
+        </div>
+
+        <div class="question">
+          <label class="option">
+            <input type="checkbox" name="truthful_certification" value="Yes" required>
+            <span><span data-lang="en">I certify that this is a truthful response. <span class="required-mark">*</span></span><span data-lang="es">Certifico que esta respuesta es verdadera. <span class="required-mark">*</span></span></span>
+          </label>
+        </div>
+
+        <div class="status" id="submitStatus"></div>
+      </section>
+
+      <div class="nav-row" id="navRow">
+        <button type="button" class="btn btn-secondary" id="backButton"><span data-lang="en">Back</span><span data-lang="es">Atrás</span></button>
+        <button type="button" class="btn btn-primary" id="nextButton"><span data-lang="en">Next</span><span data-lang="es">Siguiente</span></button>
+        <button type="submit" class="btn btn-primary" id="submitButton" style="display:none"><span data-lang="en">Submit Survey</span><span data-lang="es">Enviar encuesta</span></button>
+      </div>
+    </form>
+
+    <section class="confirmation" id="confirmation">
+      <img src="city-logo.png" class="logo" alt="">
+      <h2 data-lang="en">Thank you for completing the survey.</h2>
+      <h2 data-lang="es">Gracias por completar la encuesta.</h2>
+      <p data-lang="en">Your response has been submitted to the City of Galena Park.</p>
+      <p data-lang="es">Su respuesta ha sido enviada a la Ciudad de Galena Park.</p>
+    </section>
+
+    <footer>
+      <span data-lang="en">City of Galena Park · Office of the Mayor</span>
+      <span data-lang="es">Ciudad de Galena Park · Oficina del Alcalde</span>
+    </footer>
+  </main>
+
+<script>
+  // Replace this after deploying Code.gs as a Google Apps Script web app.
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzrsoj-pVIwlZEn25g0DmakKuY-Gv59TEuxs9hj1K8r4UmcDqc6OUIUTdzBzY9yRKJc/exec";
+
+  const form = document.getElementById("surveyForm");
+  const sections = [...document.querySelectorAll(".section-card")];
+  let currentSection = 0;
+  let language = "en";
+
+  const destinationHTML = (n, required) => `
+    <div class="question">
+      <h3>${n === 1 ? "Recurring Destination 1 / Destino recurrente 1" : `Recurring Destination ${n} / Destino recurrente ${n}`}</h3>
+      ${n > 1 ? `<label class="field-label">${n === 2 ? "35" : "36"}. Do you have a ${n === 2 ? "second" : "third"} recurring destination? / ¿Tiene un ${n === 2 ? "segundo" : "tercer"} destino recurrente?</label>
+      <select name="destination_${n}_enabled" data-destination-toggle="${n}" required><option value="">Select / Seleccione</option><option value="Yes">Yes / Sí</option><option value="No">No</option></select>` : ""}
+      <div id="destinationBlock${n}" class="${n > 1 ? "conditional" : ""}">
+        <div class="grid-2" style="margin-top:14px">
+          <div><label class="field-label">${n === 1 ? "29" : ""}. Destination name or address / Nombre o dirección</label><input type="text" name="destination_${n}_name" ${required ? "required" : ""}></div>
+          <div><label class="field-label">Trip purpose / Propósito</label><select name="destination_${n}_purpose" ${required ? "required" : ""}><option value="">Select / Seleccione</option><option>Work / Trabajo</option><option>Job search / Búsqueda de empleo</option><option>Medical care / Atención médica</option><option>Pharmacy / Farmacia</option><option>Education or training / Educación o capacitación</option><option>Childcare / Cuidado de niños</option><option>Groceries or shopping / Compras</option><option>Government or social services / Servicios</option><option>Family or caregiving / Familia o cuidado</option><option>Religious or community / Religiosa o comunitaria</option><option>Other / Otro</option></select></div>
+          <div><label class="field-label">Frequency / Frecuencia</label><select name="destination_${n}_frequency" ${required ? "required" : ""}><option value="">Select / Seleccione</option><option>5+ days/week / 5+ días/semana</option><option>3–4 days/week / 3–4 días/semana</option><option>1–2 days/week / 1–2 días/semana</option><option>A few times/month / Algunas veces/mes</option><option>Less than monthly / Menos de una vez/mes</option></select></div>
+          <div><label class="field-label">Arrival time / Hora de llegada</label><input type="time" name="destination_${n}_arrival" ${required ? "required" : ""}></div>
+          <div><label class="field-label">Return or departure time / Hora de salida o regreso</label><input type="time" name="destination_${n}_return" ${required ? "required" : ""}></div>
+          <div><label class="field-label">Does METRO serve or come near it? / ¿METRO ofrece servicio cerca?</label><select name="destination_${n}_metro_nearby" ${required ? "required" : ""}><option value="">Select / Seleccione</option><option>Yes / Sí</option><option>No</option><option>Not sure / No estoy seguro</option></select></div>
+        </div>
+      </div>
+    </div>`;
+
+  document.getElementById("destinations").innerHTML =
+    destinationHTML(1, true) + destinationHTML(2, false) + destinationHTML(3, false);
+
+  const demographics = [
+    ["39. Age range / Rango de edad", "age_range", ["Younger than 16 / Menor de 16", "16–17", "18–24", "25–34", "35–44", "45–54", "55–64", "65–74", "75 or older / 75 o más", "Prefer not to answer / Prefiero no responder"]],
+    ["40. Household size / Personas en el hogar", "household_size", ["1","2","3","4","5","6","7 or more / 7 o más","Prefer not to answer / Prefiero no responder"]],
+    ["41. Children under 18 in household / Menores de 18 en el hogar", "children_count", ["0","1","2","3","4","5 or more / 5 o más","Prefer not to answer / Prefiero no responder"]],
+    ["42. Anyone age 65 or older in household? / ¿Alguien de 65 años o más?", "senior_household", ["Yes / Sí","No","Prefer not to answer / Prefiero no responder"]],
+    ["43. Employment status / Situación laboral", "employment_status", ["Employed full-time / Tiempo completo","Employed part-time / Tiempo parcial","Self-employed / Por cuenta propia","Unemployed, looking / Desempleado, buscando","Unemployed, not looking / Desempleado, no buscando","Retired / Jubilado","Unable to work / No puede trabajar","Caregiver or homemaker / Cuidador o responsable del hogar","Prefer not to answer / Prefiero no responder"]],
+    ["44. Student or training status / Estado de estudiante o capacitación", "student_status", ["Full-time / Tiempo completo","Part-time / Tiempo parcial","No","Prefer not to answer / Prefiero no responder"]],
+    ["45. Veteran or current military service? / ¿Veterano o servicio militar actual?", "veteran_status", ["Yes / Sí","No","Prefer not to answer / Prefiero no responder"]],
+    ["46. Annual household income before taxes / Ingreso anual del hogar antes de impuestos", "household_income", ["Less than $15,000 / Menos de $15,000","$15,000–$24,999","$25,000–$34,999","$35,000–$49,999","$50,000–$74,999","$75,000–$99,999","$100,000 or more / $100,000 o más","Not sure / No estoy seguro","Prefer not to answer / Prefiero no responder"]],
+    ["47. Primary language at home / Idioma principal en el hogar", "home_language", ["English / Inglés","Spanish / Español","English and Spanish equally / Ambos por igual","Another language / Otro idioma","Prefer not to answer / Prefiero no responder"]],
+    ["48. Hispanic or Latino? / ¿Hispano o latino?", "hispanic_latino", ["Yes / Sí","No","Prefer not to answer / Prefiero no responder"]]
+  ];
+
+  document.getElementById("demographics").innerHTML = demographics.map(([label,name,opts]) =>
+    `<div class="question"><label class="prompt">${label} <span class="required-mark">*</span></label><select name="${name}" required><option value="">Select / Seleccione</option>${opts.map(o=>`<option>${o}</option>`).join("")}</select></div>`
+  ).join("") + `
+    <fieldset class="question"><legend>49. Race / Raza <span class="required-mark">*</span></legend>
+      <div class="options" data-required-group="race">
+        ${["American Indian or Alaska Native / Indígena americano o nativo de Alaska","Asian / Asiático","Black or African American / Negro o afroamericano","Native Hawaiian or Pacific Islander / Nativo de Hawái o isla del Pacífico","White / Blanco","Another race / Otra raza","Prefer not to answer / Prefiero no responder"].map(o=>`<label class="option"><input type="checkbox" name="race" value="${o}"><span>${o}</span></label>`).join("")}
+      </div>
+    </fieldset>
+    <fieldset class="question"><legend>50. Public assistance received by anyone in the household / Asistencia pública recibida por alguien en el hogar <span class="required-mark">*</span></legend>
+      <div class="options" data-required-group="public_assistance">
+        ${["SNAP or food assistance / SNAP o asistencia alimentaria","Medicaid or CHIP","SSI or disability assistance / SSI o asistencia por discapacidad","Housing assistance / Asistencia de vivienda","TANF","Free or reduced school meals / Comidas escolares gratuitas o reducidas","Other public assistance / Otra asistencia pública","None / Ninguna","Not sure / No estoy seguro","Prefer not to answer / Prefiero no responder"].map(o=>`<label class="option"><input type="checkbox" name="public_assistance" value="${o}"><span>${o}</span></label>`).join("")}
+      </div>
+    </fieldset>`;
+
+  function setLanguage(lang) {
+    language = lang;
+    document.documentElement.classList.toggle("lang-es", lang === "es");
+    document.documentElement.lang = lang;
+    document.getElementById("langEn").classList.toggle("active", lang === "en");
+    document.getElementById("langEs").classList.toggle("active", lang === "es");
+    document.getElementById("surveyLanguage").value = lang === "en" ? "English" : "Spanish";
+    updateProgress();
+  }
+
+  document.getElementById("langEn").addEventListener("click", () => setLanguage("en"));
+  document.getElementById("langEs").addEventListener("click", () => setLanguage("es"));
+
+  function updateProgress() {
+    const pct = Math.round(((currentSection + 1) / sections.length) * 100);
+    document.getElementById("progressBar").style.width = pct + "%";
+    document.getElementById("progressPercent").textContent = pct + "%";
+    document.getElementById("progressLabel").textContent =
+      language === "en" ? `Section ${currentSection + 1} of ${sections.length}` : `Sección ${currentSection + 1} de ${sections.length}`;
+    document.getElementById("backButton").style.visibility = currentSection === 0 ? "hidden" : "visible";
+    document.getElementById("nextButton").style.display = currentSection === sections.length - 1 ? "none" : "inline-block";
+    document.getElementById("submitButton").style.display = currentSection === sections.length - 1 ? "inline-block" : "none";
+  }
+
+  function showSection(index) {
+    sections.forEach((s,i) => s.classList.toggle("active", i === index));
+    currentSection = index;
+    updateProgress();
+    window.scrollTo({ top: document.querySelector(".progress-wrap").offsetTop - 8, behavior: "smooth" });
+  }
+
+  function validateCurrentSection() {
+    const section = sections[currentSection];
+    const required = [...section.querySelectorAll("[required]")].filter(el => el.offsetParent !== null);
+    for (const el of required) {
+      if (!el.checkValidity()) {
+        el.reportValidity();
+        return false;
+      }
+    }
+    for (const group of section.querySelectorAll("[data-required-group]")) {
+      if (group.offsetParent !== null && !group.querySelector('input[type="checkbox"]:checked')) {
+        showError(language === "en" ? "Please select at least one answer for each required checkbox question." : "Seleccione al menos una respuesta en cada pregunta obligatoria.");
+        group.scrollIntoView({behavior:"smooth", block:"center"});
+        return false;
+      }
+    }
+    hideError();
+    return true;
+  }
+
+  function showError(msg) {
+    const box = document.getElementById("errorSummary");
+    box.textContent = msg;
+    box.classList.add("show");
+  }
+  function hideError() { document.getElementById("errorSummary").classList.remove("show"); }
+
+  document.getElementById("nextButton").addEventListener("click", () => {
+    if (validateCurrentSection()) showSection(currentSection + 1);
+  });
+  document.getElementById("backButton").addEventListener("click", () => showSection(currentSection - 1));
+
+  document.querySelectorAll('input[type="radio"][data-toggle]').forEach(radio => {
+    radio.addEventListener("change", () => {
+      const group = document.querySelectorAll(`input[name="${radio.name}"]`);
+      const targets = new Set([...group].map(x=>x.dataset.toggle).filter(Boolean));
+      targets.forEach(id => document.getElementById(id).classList.remove("show"));
+      if (radio.checked && radio.dataset.toggle) document.getElementById(radio.dataset.toggle).classList.add("show");
+    });
+  });
+
+  document.querySelectorAll("[data-select-toggle]").forEach(sel => {
+    sel.addEventListener("change", () => {
+      const target = document.getElementById(sel.dataset.selectToggle);
+      target.classList.toggle("show", sel.value && sel.value !== "Never");
+    });
+  });
+
+  document.querySelectorAll("[data-destination-toggle]").forEach(sel => {
+    sel.addEventListener("change", () => {
+      const n = sel.dataset.destinationToggle;
+      const block = document.getElementById(`destinationBlock${n}`);
+      block.classList.toggle("show", sel.value === "Yes");
+      block.querySelectorAll("input,select").forEach(el => el.required = sel.value === "Yes");
+    });
+  });
+
+  function updateContactRequirements() {
+    const follow = document.getElementById("followUp").value === "Yes";
+    const focus = ["Yes","Maybe"].includes(document.getElementById("focusGroup").value);
+    document.getElementById("contactPreferences").classList.toggle("show", follow || focus);
+  }
+  document.getElementById("followUp").addEventListener("change", updateContactRequirements);
+  document.getElementById("focusGroup").addEventListener("change", updateContactRequirements);
+
+  function formToObject(form) {
+    const data = {};
+    new FormData(form).forEach((value,key) => {
+      if (data[key]) data[key] = Array.isArray(data[key]) ? [...data[key], value] : [data[key], value];
+      else data[key] = value;
+    });
+    Object.keys(data).forEach(k => { if (Array.isArray(data[k])) data[k] = data[k].join(" | "); });
+    data.client_timestamp = new Date().toISOString();
+    return data;
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!validateCurrentSection()) return;
+
+    if (document.getElementById("testimonialPermission").value === "Named" && !document.getElementById("nameField").value.trim()) {
+      showError(language === "en" ? "Please enter your name because you authorized a named testimonial." : "Ingrese su nombre porque autorizó un comentario con nombre.");
+      document.getElementById("nameField").focus();
+      return;
+    }
+    const contactNeeded = document.getElementById("followUp").value === "Yes" || ["Yes","Maybe"].includes(document.getElementById("focusGroup").value);
+    if (contactNeeded && !document.getElementById("emailField").value.trim() && !document.getElementById("phoneField").value.trim()) {
+      showError(language === "en" ? "Please provide an email address or phone number for follow-up." : "Proporcione un correo electrónico o teléfono para seguimiento.");
+      return;
+    }
+
+    if (!APPS_SCRIPT_URL.startsWith("https://script.google.com/")) {
+      showError(language === "en"
+        ? "The form owner must add the deployed Google Apps Script URL before submissions can be accepted."
+        : "El propietario del formulario debe agregar la URL implementada de Google Apps Script antes de aceptar respuestas.");
+      return;
+    }
+
+    const submitButton = document.getElementById("submitButton");
+    const status = document.getElementById("submitStatus");
+    submitButton.disabled = true;
+    status.className = "status show";
+    status.textContent = language === "en" ? "Submitting your response…" : "Enviando su respuesta…";
+
+    try {
+      const payload = formToObject(form);
+      await fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
+      form.style.display = "none";
+      document.querySelector(".progress-wrap").style.display = "none";
+      document.getElementById("confirmation").classList.add("show");
+      window.scrollTo({top:0, behavior:"smooth"});
+    } catch (err) {
+      status.className = "status show error";
+      status.textContent = language === "en"
+        ? "Your response could not be submitted. Please check your connection and try again."
+        : "No se pudo enviar su respuesta. Revise su conexión e inténtelo de nuevo.";
+      submitButton.disabled = false;
+    }
+  });
+
+  document.getElementById("userAgent").value = navigator.userAgent;
+  document.getElementById("referrer").value = document.referrer || "Direct";
+  updateProgress();
+</script>
+</body>
+</html>
